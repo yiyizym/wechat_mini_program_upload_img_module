@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/upload_img_demo/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "upload_img_demo",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true
+  }
+}
