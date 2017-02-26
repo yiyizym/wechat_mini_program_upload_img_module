@@ -4,9 +4,10 @@ const wechat = require('../../../utils/wechat.js');
 const util = require('../../../utils/util.js');
 
 const defaultData = {
-    chooseImage: 'chooseImage',
-    previewImage: 'previewImage',
-    setChooseImageCallback: 'setChooseImageCallback',
+    _chooseImage: 'chooseImage',
+    _previewImage: 'previewImage',
+    // 这个方法可以用来设置选择好图片后的回调，但不成熟，先注释掉
+    // setChooseImageCallback: 'setChooseImageCallback',
     imageUploadTitle: '上传图片',
     sourceType: ['camera', 'album'],
     sizeType: ['compressed'],
@@ -27,16 +28,16 @@ class ImageUploader {
         this.page = pageContext;
         this.data = this.page.data[key];
 
-        this.data['chooseImage'] = this.data.chooseImage + key;
-        this.data['previewImage'] = this.data.previewImage + key;
-        this.data['setChooseImageCallback'] = this.data.setChooseImageCallback + key;
+        this.data._chooseImage = this.data._chooseImage + key;
+        this.data._previewImage = this.data._previewImage + key;
+        // this.data.setChooseImageCallback = this.data.setChooseImageCallback + key;
         this.page.setData({
             [key]: this.data
         })
 
-        this.page[this.data.chooseImage] = this.chooseImage.bind(this);
-        this.page[this.data.previewImage] = this.previewImage.bind(this);
-        this.page[this.data.setChooseImageCallback] = this.setChooseImageCallback.bind(this);
+        this.page[this.data._chooseImage] = this.chooseImage.bind(this);
+        this.page[this.data._previewImage] = this.previewImage.bind(this);
+        // this.page[this.data.setChooseImageCallback] = this.setChooseImageCallback.bind(this);
         
     }
 
@@ -57,14 +58,14 @@ class ImageUploader {
         });
     }
 
-    setChooseImageCallback(cb){
-        if(typeof cb == 'function'){
-            this._chooseImageCb = cb;
-        }
-        else {
-            throw 'setChooseImageCallback receives a "function" as argument';
-        }
-    }
+    // setChooseImageCallback(cb){
+    //     if(typeof cb == 'function'){
+    //         this._chooseImageCb = cb;
+    //     }
+    //     else {
+    //         throw 'setChooseImageCallback receives a "function" as argument';
+    //     }
+    // }
 
     _chooseImageCb(res){
         let filePath = res.tempFilePaths[0];
