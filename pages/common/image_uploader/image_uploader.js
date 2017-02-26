@@ -1,5 +1,6 @@
 'use strict';
 const wechat = require('../../../utils/wechat.js');
+const Promise = require('../../../utils/bluebird.js');
 const util = require('../../../utils/util.js');
 
 const defaultData = {
@@ -53,7 +54,7 @@ class ImageUploader {
     }
 
     _chooseImageCb(res){
-        filePath = res.tempFilePaths[0];
+        let filePath = res.tempFilePaths[0];
         this._uploadImage(res).then(res => {
             this._addToUploadedPaths(res, filePath);
         }, e => {
@@ -67,11 +68,14 @@ class ImageUploader {
         let uploadParams = data.uploadParams;
         let formData = Object.assign({}, uploadParams['formData'], {});
 
+        console.info('为了演示效果，直接 resolve true ，真实使用时，请删除 return Promise.resolve(true);'); 
+        return Promise.resolve(true);
+
         return wechat.uploadFile(uploadParams['url'],filePath,uploadParams['name'], formData);
     }
 
     _addToUploadedPaths(resp, filePath){
-        if (resp.return_code == 0) {
+        if (this._isUploadSuccess(resp)) {
             let current = this.data.uploadedImagesPaths;
             current.push(filePath);
             this.page.setData({
@@ -81,6 +85,11 @@ class ImageUploader {
         else {
             console.error(resp);
         }
+    }
+
+    _isUploadSuccess(resp){
+        console.info('为了演示效果，直接 return true ，真实使用时，请写自己的判断逻辑'); 
+        return true;
     }
 
 }
