@@ -1,9 +1,12 @@
 'use strict';
-const wechat = require('../../../utils/wechat.js');
 const Promise = require('../../../utils/bluebird.js');
+const wechat = require('../../../utils/wechat.js');
 const util = require('../../../utils/util.js');
 
 const defaultData = {
+    chooseImage: 'chooseImage',
+    previewImage: 'previewImage',
+    setChooseImageCallback: 'setChooseImageCallback',
     imageUploadTitle: '上传图片',
     sourceType: ['camera', 'album'],
     sizeType: ['compressed'],
@@ -17,13 +20,23 @@ const defaultData = {
 };
 
 class ImageUploader {
-    constructor(pageContext){
+    // 请确保 key 是唯一的，否则同一个页面内多个实例的数据和方法会互相覆盖
+    constructor(pageContext, key = ''){
         let that = this;
+        this.key = key;
         this.page = pageContext;
-        this.data = this.page.data.imageUploadData;
-        this.page.chooseImage = this.chooseImage.bind(this);
-        this.page.previewImage = this.previewImage.bind(this);
-        this.page.setChooseImageCallback = this.setChooseImageCallback.bind(this);
+        this.data = this.page.data[key];
+
+        this.data['chooseImage'] = this.data.chooseImage + key;
+        this.data['previewImage'] = this.data.previewImage + key;
+        this.data['setChooseImageCallback'] = this.data.setChooseImageCallback + key;
+        this.page.setData({
+            [key]: this.data
+        })
+
+        this.page[this.data.chooseImage] = this.chooseImage.bind(this);
+        this.page[this.data.previewImage] = this.previewImage.bind(this);
+        this.page[this.data.setChooseImageCallback] = this.setChooseImageCallback.bind(this);
         
     }
 
@@ -76,17 +89,15 @@ class ImageUploader {
 
     _addToUploadedPaths(resp, filePath){
         if (this._isUploadSuccess(resp)) {
-            let current = this.data.uploadedImagesPaths;
-            current.push(filePath);
+            this.data.uploadedImagesPaths.push(filePath);
             this.page.setData({
-                'imageUploadData.uploadedImagesPaths': current
+                [this.key]: this.data
             });
         }
         else {
             console.error(resp);
         }
     }
-
     _isUploadSuccess(resp){
         console.info('为了演示效果，直接 return true ，真实使用时，请写自己的判断逻辑'); 
         return true;
