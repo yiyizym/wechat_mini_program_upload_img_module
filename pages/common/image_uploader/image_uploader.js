@@ -31,9 +31,18 @@ class ImageUploader {
         this.data._chooseImage = this.data._chooseImage + key;
         this.data._previewImage = this.data._previewImage + key;
         // this.data.setChooseImageCallback = this.data.setChooseImageCallback + key;
+
+        let uploadedImagesPaths = `${key}.uploadedImagesPaths`;
         this.page.setData({
-            [key]: this.data
-        })
+            [key]: this.data,
+            [uploadedImagesPaths]: [] // 为了在有默认图片时，点击 previewImage 生效
+        });
+
+        // 为了在有默认图片时，点击 previewImage 生效
+        this.page.setData({
+            [uploadedImagesPaths]: this.data.uploadedImagesPaths
+        });
+
 
         this.page[this.data._chooseImage] = this.chooseImage.bind(this);
         this.page[this.data._previewImage] = this.previewImage.bind(this);
