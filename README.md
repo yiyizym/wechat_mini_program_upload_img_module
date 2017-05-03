@@ -7,7 +7,7 @@
 ## 使用方法和注意事项
 
 - 因为本组件有大量 ES6 语法，请先勾选小程序开发工具中的“开启 ES6 转 ES5 ”选项
-- 先在页面的 wxml 文件中引入本组件模板，下面的代码引入了两个组件。 `img1` 与 `img2` 分别是两个组件的 `key` ，请确保同一个页面中不同组件的 `key` 不一样 ：
+- 先在页面的 wxml 文件中引入本组件模板，下面的代码实例化了两个组件实例。 `img1` 与 `img2` 分别是两个实例的 `key` ，请确保同一个页面中不同实例的 `key` 不一样 ：
 ```
 <!--index.wxml-->
 <import src="../common/image_uploader/image_uploader.wxml" />
@@ -17,7 +17,7 @@
 </view>
 ```
 
-- 然后在页面的 js 文件中，先引入组件的类，定制各个组件的初始数据，最后实例化各个组件，与上面的代码对应的写法如下：
+- 然后在页面的 js 文件中，先引入组件的类，定制各个组件的初始数据，然后实例化，与上面的代码对应的写法如下：
 ```
 //index.js
 const ImageUploader = require('../common/image_uploader/image_uploader.js');
